@@ -8,3 +8,6 @@ function useTasks() {
   return { tasks };
 }
 
+const useSharedTasks = createSharedComposable(useTasks);
+
+export { useSharedTasks };

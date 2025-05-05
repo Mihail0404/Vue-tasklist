@@ -2,13 +2,10 @@
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/yup";
 import * as yup from "yup";
-import { v4 as uuidv4 } from "uuid";
 
 import * as taskEntity from "@/entities/task";
 
-const emit = defineEmits<{
-  sendTask: [task: taskEntity.Model.Types.TaskType];
-}>();
+const sharedTasks = taskEntity.Model.Store.useSharedTasks().tasks;
 
 const schema = toTypedSchema(
   yup.object({
@@ -26,8 +23,12 @@ const [title, titleAttrs] = defineField("title");
 const [description, descriptionAttrs] = defineField("description");
 const [date, dateAttrs] = defineField("date");
 
+function addTask(obj: taskEntity.Model.Types.TaskType) {
+  sharedTasks.value.push(obj);
+}
+
 const onSubmit = handleSubmit((values) => {
-  emit("sendTask", values);
+  addTask(values);
 });
 </script>
 <template>
